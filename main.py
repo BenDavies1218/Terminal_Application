@@ -1,4 +1,4 @@
-from functions import shuffler, game, banker_offer, game_finish, double_or_nothing
+from functions import game_menu, shuffler, game, banker_offer, game_finish, double_or_nothing
 
 cases = {
         1: 1,
@@ -24,7 +24,13 @@ cases = {
         21: 150000,
         22: 200000
     }
+cases_left = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
 
+file_name = "Gamelog.csv"
 
+try:
+    
+
+game_menu()
 shuffled_cases = shuffler(cases)
 print(shuffled_cases)
