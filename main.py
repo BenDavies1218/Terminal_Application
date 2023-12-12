@@ -12,6 +12,7 @@ except FileNotFoundError:
     gamelog.write("Deal or No Deal\n")
     gamelog.close()
 
+# Global variables
 cases = {
         1: 1,
         2: 5,
@@ -36,8 +37,15 @@ cases = {
         21: 150000,
         22: 200000
     }
-cases_left = ["|", "1", "|", 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
+cases_left = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
+count = 0
+shuffled_cases = shuffler(cases)
+user_case = select_case(cases_left)
+end_game = game_finish(cases_left)
 
 game_menu()
-shuffled_cases = shuffler(cases)
-select_case(cases_left)
+
+while end_game == False:
+    pass
+    # call game function
+    # call the banker offer function
