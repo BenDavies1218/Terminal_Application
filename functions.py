@@ -13,7 +13,6 @@ def game_menu():
         writer = csv.writer(f)
         writer.writerow(["Player", name])
 
-
 def shuffler(cases):
     values = list(cases.values())
     shuffle_list = random.sample(values, len(values))
@@ -40,12 +39,18 @@ def select_case(cases_left):
             print("Please enter an integer")
             continue
     # remove selected case from cases_left
+    with open(file, "a") as f:
+        writer = csv.writer(f)
+        writer.writerow(["Users_choice", user_case])
     for case in cases_left:
         if case == user_case:
             cases_left.remove(case)
             break
         else:
             continue
+    with open(file, "a") as f:
+        writer = csv.writer(f)
+        writer.writerow(["case_removed", user_case])
     return user_case, cases_left
     # return selected case back to main
 

@@ -42,7 +42,7 @@ cases = {
     }
 cases_left = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
 shuffled_cases = shuffler(cases)
-user_case = select_case(cases_left)
+user_case, cases_left = select_case(cases_left)
 end_game = game_finish(cases_left)
 
 
