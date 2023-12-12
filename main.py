@@ -1,3 +1,4 @@
+from colored import fg, attr, bg
 from functions import game_menu, shuffler, select_case, game, banker_offer, game_finish, double_or_nothing
 import csv
 
