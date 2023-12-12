@@ -31,7 +31,7 @@ def select_case(cases_left):
 def game(shuffle_cases, cases_left, user_case, count):
     pass
     # loop to remove selected case from cases_left list
-    # while loop check if count =< 6
+    # while loop check if count =< 0
     # print cases_left to user
     # prompt user to enter input 
     # loop to check if input is in cases left
@@ -41,9 +41,9 @@ def banker_offer(cases_left, shuffle_cases):
     pass
     # 
 
+def double_or_nothing():
+    pass
+
 def game_finish(cases_left):
     pass
     # if cases left < 2 return True else False
-
-def double_or_nothing():
-    pass

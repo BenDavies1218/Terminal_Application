@@ -38,7 +38,6 @@ cases = {
         22: 200000
     }
 cases_left = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
-count = 0
 shuffled_cases = shuffler(cases)
 user_case = select_case(cases_left)
 end_game = game_finish(cases_left)
@@ -47,5 +46,11 @@ game_menu()
 
 while end_game == False:
     pass
+    # interation = 0
+    # count = 6 - interation
     # call game function
     # call the banker offer function
+    # interation += 1
+
+double_or_nothing()
+    # includes normal end to game print cases value
