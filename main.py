@@ -13,6 +13,8 @@ except FileNotFoundError:
     gamelog.write("Deal or No Deal\n")
     gamelog.close()
 
+game_menu()
+
 # Global variables
 cases = {
         1: 1,
@@ -43,7 +45,7 @@ shuffled_cases = shuffler(cases)
 user_case = select_case(cases_left)
 end_game = game_finish(cases_left)
 
-game_menu()
+
 
 while end_game == False:
     pass
