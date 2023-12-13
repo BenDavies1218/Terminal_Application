@@ -1,9 +1,11 @@
 import random
 import csv
-from colored import fg, attr, bg 
+from colored import fg, attr, bg
+
 
 
 file = "gamelog.csv"
+
 
 def game_menu():
     print("Welcome to Deal or No Deal Will you be a millionaire")
@@ -62,17 +64,32 @@ def select_case(cases_left):
             continue
     with open(file, "a") as f:
         writer = csv.writer(f)
-        writer.writerows(["case_removed", user_case])
+        writer.writerow(["case_removed", user_case])
     return user_case, cases_left
     # return selected case back to main
 
-def game(shuffle_cases, cases_left, user_case, count):
-    pass
+
+
+def game(cases, shuffle_cases, cases_left, user_case, interation):
+    count = 6 - int(interation)
+    print(count)
     # while loop check if count =< 0
+    while count >= 0:
     # print cases_left to user
+        print("Cases Left: ", *cases_left)
+        print("Money Left: ", *cases.values())
+        tobe_removed = int(input("Please select a Case to be removed"))
+        count -= 1
+        print(count)
+    return cases, shuffle_cases, cases_left, user_case, interation
+
     # prompt user to enter input 
     # loop to check if input is in cases left
     # 
+
+
+
+
 
 def banker_offer(cases_left, shuffle_cases):
     pass
@@ -83,4 +100,3 @@ def double_or_nothing():
 
 def game_finish(cases_left):
     pass
-    # if cases left < 2 return True else False
