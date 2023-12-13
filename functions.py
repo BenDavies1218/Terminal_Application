@@ -8,7 +8,15 @@ file = "gamelog.csv"
 def game_menu():
     print("Welcome to Deal or No Deal Will you be a millionaire")
     start_game = input("press any button to start")
-    name = input("\n Please enter your name:  ")
+    while True:
+        try:
+            name = input("\n Please enter your name:  ")
+            if all(letter.isalpha() or letter.isspace() for letter in name):
+                break
+            else:
+                print("Invalid name please try again")
+        except TypeError:
+            print("Error in name variable")
     with open(file, "a") as f:
         writer = csv.writer(f)
         writer.writerow(["Player", name])
@@ -19,7 +27,11 @@ def shuffler(cases):
     shuffle_cases = dict(zip(cases.keys(), shuffle_list))
     with open(file, "a") as f:
         writer = csv.writer(f)
-        writer.writerow(["cases shuffled = True"])
+        writer.writerow(["cases shuffled = True\n"])
+    with open(file, "a") as f:
+        writer = csv.writer(f)
+        for key, value in shuffle_cases.items():
+            writer.writerow([key, value])        
     return shuffle_cases
 
 def select_case(cases_left):
@@ -35,13 +47,13 @@ def select_case(cases_left):
             else:
                 print("Please choose a case between 1-22")
                 continue
-        except:
+        except ValueError:
             print("Please enter an integer")
             continue
     # remove selected case from cases_left
     with open(file, "a") as f:
         writer = csv.writer(f)
-        writer.writerow(["Users_choice", user_case])
+        writer.writerow(["Users_case", user_case])
     for case in cases_left:
         if case == user_case:
             cases_left.remove(case)
@@ -50,13 +62,12 @@ def select_case(cases_left):
             continue
     with open(file, "a") as f:
         writer = csv.writer(f)
-        writer.writerow(["case_removed", user_case])
+        writer.writerows(["case_removed", user_case])
     return user_case, cases_left
     # return selected case back to main
 
 def game(shuffle_cases, cases_left, user_case, count):
     pass
-    # loop to remove selected case from cases_left list
     # while loop check if count =< 0
     # print cases_left to user
     # prompt user to enter input 

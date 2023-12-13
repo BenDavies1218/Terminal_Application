@@ -45,14 +45,13 @@ shuffled_cases = shuffler(cases)
 user_case, cases_left = select_case(cases_left)
 end_game = game_finish(cases_left)
 
-
-
 while end_game == False:
     pass
     # interation = 0
     # count = 6 - interation
     # call game function
     # call the banker offer function
+    # check if end_game == True
     # interation += 1
 
 double_or_nothing()
