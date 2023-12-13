@@ -54,5 +54,5 @@ while interation < 6:
     # # check if end_game == True
     # end_game = game_finish(cases_left)
     # # interation += 1
-    # interation =+ 1
+    interation += 1
 exit()

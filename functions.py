@@ -1,6 +1,7 @@
 import random
 import csv
 from colored import fg, attr, bg
+import os
 
 
 
@@ -16,7 +17,7 @@ def game_menu():
             if all(letter.isalpha() or letter.isspace() for letter in name):
                 break
             else:
-                print("Invalid name please try again")
+                print("\n Invalid name please try again")
         except TypeError:
             print("Error in name variable")
     with open(file, "a") as f:
@@ -74,13 +75,34 @@ def game(cases, shuffle_cases, cases_left, user_case, interation):
     count = 6 - int(interation)
     print(count)
     # while loop check if count =< 0
-    while count >= 0:
+    while count != 0:
     # print cases_left to user
         print("Cases Left: ", *cases_left)
         print("Money Left: ", *cases.values())
-        tobe_removed = int(input("Please select a Case to be removed"))
+        print(f"Your Lucky Case Is:  {user_case}")
+        # ask user to enter a case to be removed
+        tobe_removed = int(input("Please select a Case to be removed:  "))
+        # remove case from cases left
+        for case in cases_left:
+            if case == tobe_removed:
+                rm_case = case
+                cases_left.remove(case)
+                break
+            else:
+                continue
+        for key, value in cases.items():
+            if key == tobe_removed:
+                rm_value = value
+                cases.pop(key)
+                break
+            else:
+                continue
+        print(f"Case {rm_case} contained: {rm_value}")
         count -= 1
         print(count)
+        if count == 0:
+            break
+        
     return cases, shuffle_cases, cases_left, user_case, interation
 
     # prompt user to enter input 
