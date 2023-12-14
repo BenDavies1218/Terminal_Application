@@ -1,6 +1,7 @@
 from colored import fg, attr, bg
 from functions import game_menu, shuffler, select_case, game, banker_offer, game_finish, double_or_nothing
 import csv
+import sys, subprocess
 
 file = "gamelog.csv"
 
@@ -13,9 +14,9 @@ except FileNotFoundError:
     gamelog.write("Deal or No Deal\n")
     gamelog.close()
 
-game_menu()
 
-# Global variables
+
+# Variables
 cases = {
         1: 1,
         2: 5,
@@ -41,17 +42,11 @@ cases = {
         22: 200000
     }
 cases_left = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
+
+game_menu()
 shuffled_cases = shuffler(cases)
 user_case, cases_in_play = select_case(cases_left)
-
-interation = 0
-while interation < 6:
-    #call game function
-    game(cases, shuffled_cases, cases_in_play, user_case, interation)
-    # # call the banker offer function
-
-    # banker_offer(cases_left, shuffled_cases)
-    # # interation += 1
-    interation += 1
-# call game finish function
+game(cases, shuffled_cases, cases_in_play, user_case)
+double_or_nothing(user_case, last_case)
+print("exitedgame")
 exit()

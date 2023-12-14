@@ -1,16 +1,23 @@
 import random
 import csv
-from colored import fg, attr, bg, fore
+from colored import foreground, attributes, background 
 import sys, subprocess
+
+cases_left = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
 
 file = "gamelog.csv"
 
 def game_menu():
+        # clears the screen
+    try:
+        subprocess.run('clear')
+    except:
+        subprocess.run('cls')
     print("Welcome to Deal or No Deal Will you be a millionaire")
-    start_game = input("press any button to start")
+    start_game = input("\npress any button to start")
     while True:
         try:
-            name = input("\n Please enter your name:  ")
+            name = input("\nPlease enter your name:  ")
             if all(letter.isalpha() or letter.isspace() for letter in name):
                 break
             else:
@@ -37,7 +44,7 @@ def shuffler(cases):
 def select_case(cases_left):
     # print cases left to user
     print(cases_left)
-    # user will input a number between and including 1-23
+    # user will input a number between and including 1-22
     while True:
         try:
             user_case = int(input("Please Select your lucky case:  "))
@@ -65,64 +72,75 @@ def select_case(cases_left):
     return user_case, cases_left
     # return selected case back to main
 
-def game(cases, shuffle_cases, cases_left, user_case, interation):
-    count = 6 - int(interation)
-    print(count)
+def game(cases, shuffle_cases, cases_left, user_case):
+    interation = 0
+    while interation < 6:
+        count = 6 - int(interation)
     # while loop check if count =< 0
-    while count != 0:
-        # Checks if theres more than one case
-        try:
-            cases_left[1]
-        except:
-            break
-        # clears the screen
+        while count != 0:
+            # Checks if theres more than one case
+            try:
+                cases_left[1]
+            except:
+                break
+            # clears the screen
+            try:
+                subprocess.run('clear')
+            except:
+                subprocess.run('cls')
+        # print cases_left to user
+            print("\nMoney Left: ", *cases.values())
+            print("Cases Left to open: ", *cases_left)
+            print(f"\nYour Lucky Case Is:  {user_case}")
+            try:
+                print(f"Case {rm_case} contained: ${rm_value}")
+            except:
+                print("")
+            # ask user to enter a case to be removed
+            tobe_removed = int(input("\nPlease select a Case to be removed:  "))
+            # remove case from cases left
+            for case in cases_left:
+                if case == tobe_removed:
+                    rm_case = case
+                    cases_left.remove(case)
+                    break
+                else:
+                    continue
+            # to print value of removed case to user
+            for key, value in shuffle_cases.items():
+                if key == tobe_removed:
+                    rm_value = value
+                    break
+                else:
+                    continue
+            # remove value from game
+            for key, value in cases.items():
+                if value == rm_value:
+                    cases.pop(key)
+                    break
+                else:
+                    continue
+            with open(file, "a") as f:
+                writer = csv.writer(f)
+                writer.writerow(["case_removed", rm_case])
+            count -= 1
         try:
             subprocess.run('clear')
         except:
             subprocess.run('cls')
-    # print cases_left to user
-        print("\nMoney Left: ", *cases.values())
-        print("Cases Left: ", *cases_left)
-        print(f"\nYour Lucky Case Is:  {user_case}")
-        try:
-            print(f"Case {rm_case} contained: ${rm_value}")
-        except:
-            print("")
-        # ask user to enter a case to be removed
-        tobe_removed = int(input("\nPlease select a Case to be removed:  "))
-        # remove case from cases left
-        for case in cases_left:
-            if case == tobe_removed:
-                rm_case = case
-                cases_left.remove(case)
-                break
-            else:
-                continue
+        # Banks offer = shuffle_cases[value] / cases_left
+        total_money_left = 0
         for key, value in shuffle_cases.items():
-            if key == tobe_removed:
-                rm_value = value
-                break
-            else:
-                continue
-        for key, value in cases.items():
-            if value == rm_value:
-                cases.pop(key)
-                break
-            else:
-                continue
-        with open(file, "a") as f:
-            writer = csv.writer(f)
-            writer.writerow(["case_removed", rm_case])
-        count -= 1
-    return cases, shuffle_cases, cases_left, user_case, interation
-
-    # prompt user to enter input 
-    # loop to check if input is in cases left
-    # 
-
-def banker_offer(cases_left, shuffle_cases):
-    pass
-    # 
+            if key in cases_left:
+                total_money_left = value + total_money_left
+        banks_offer = int(total_money_left / len(cases_left))
+        print("\nMoney Left: ", *cases.values())
+        print("Cases Left to open: ", *cases_left)
+        print(f"\n${banks_offer}")
+        user_input = input("Do you accept the banks offer?  ")
+        interation += 1
+    last_case = cases_left
+    return last_case
 
 def double_or_nothing(user_case, shuffle_cases):
     pass
