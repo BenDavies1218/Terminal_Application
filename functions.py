@@ -13,8 +13,8 @@ def game_menu():
         subprocess.run('clear')
     except:
         subprocess.run('cls')
-    print("Welcome to Deal or No Deal Will you be a millionaire")
-    start_game = input("\npress any button to start")
+    print("Welcome to Deal or No Deal Will you be a millionaire?")
+    start_game = input("\npress any button to start... ")
     while True:
         try:
             name = input("\nPlease enter your name:  ")
@@ -41,7 +41,8 @@ def shuffler(cases):
             writer.writerow([key, value])        
     return shuffle_cases
 
-def select_case(cases_left):
+def select_case():
+    cases_left = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
     # print cases left to user
     print(cases_left)
     # user will input a number between and including 1-22
@@ -93,7 +94,7 @@ def game(cases, shuffle_cases, cases_left, user_case):
             print("Cases Left to open: ", *cases_left)
             print(f"\nYour Lucky Case Is:  {user_case}")
             try:
-                print(f"Case {rm_case} contained: ${rm_value}")
+                print(f"The last Case opened: {rm_case} contained: ${rm_value}")
             except:
                 print("")
             # ask user to enter a case to be removed
@@ -142,8 +143,14 @@ def game(cases, shuffle_cases, cases_left, user_case):
     last_case = cases_left
     return last_case
 
-def double_or_nothing(user_case, shuffle_cases):
-    pass
+def double_or_nothing(user_case, shuffle_cases, last_case):
+    for key, value in shuffle_cases.items():
+        if key == user_case:
+            user_case_value = value
+            break
+        else:
+            continue
+    
 
 def game_finish(cases_left, shuffle_cases, user_case):
     pass
