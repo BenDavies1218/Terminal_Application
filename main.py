@@ -3,6 +3,7 @@ from functions import game_menu, shuffler, select_case, game, game_finish, doubl
 import csv
 import sys
 import subprocess
+import time
 
 file = "gamelog.csv"
 
@@ -44,8 +45,8 @@ cases = {
 game_menu()
 shuffled_cases = shuffler(cases)
 user_case, cases_in_play = select_case()
-last_case, user_input_yes, bank_offer = game(cases, shuffled_cases, cases_in_play, user_case)
-double_or_nothing(user_case, shuffled_cases, last_case, user_input_yes, bank_offer)
+last_cases, user_input_yes, banks_offer = game(cases, shuffled_cases, cases_in_play, user_case)
+double_or_nothing(user_case, shuffled_cases, last_cases, user_input_yes, banks_offer)
 game_finish()
 print("exitedgame")
 exit()

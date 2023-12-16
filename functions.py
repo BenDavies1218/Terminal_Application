@@ -1,9 +1,8 @@
 import random
 import csv
-from colored import foreground, attributes, background 
-import sys, subprocess
-
-cases_left = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
+from colored import fg, attr, bg 
+import sys
+import subprocess
 
 file = "gamelog.csv"
 
@@ -28,6 +27,8 @@ def game_menu():
         writer = csv.writer(f)
         writer.writerow(["Player", name])
 
+
+
 def shuffler(cases):
     values = list(cases.values())
     shuffle_list = random.sample(values, len(values))
@@ -41,9 +42,15 @@ def shuffler(cases):
             writer.writerow([key, value])        
     return shuffle_cases
 
+
+
 def select_case():
     cases_left = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
-    # print cases left to user
+# print cases left to user
+    try:
+        subprocess.run('clear')
+    except:
+        subprocess.run('cls')
     print(cases_left)
     # user will input a number between and including 1-22
     while True:
@@ -73,7 +80,10 @@ def select_case():
     return user_case, cases_left
     # return selected case back to main
 
+
+
 def game(cases, shuffle_cases, cases_left, user_case):
+    cases_left = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
     interation = 0
     while interation < 6:
         count = 6 - int(interation)
@@ -150,25 +160,49 @@ def game(cases, shuffle_cases, cases_left, user_case):
             interation += 7
         else:
             interation += 1
-    last_case = cases_left
-    return last_case, user_input_yes, banks_offer
+    last_cases = cases_left
+    return last_cases, user_input_yes, banks_offer
 
-def double_or_nothing(user_case, shuffle_cases, last_case, user_input_yes, banks_offer):
+
+
+def double_or_nothing(user_case, shuffle_cases, last_cases, user_input_yes, banks_offer):
     try:
         subprocess.run('clear')
     except:
         subprocess.run('cls')
-    if user_input_yes != True:
-        for key, value in shuffle_cases.items():
-            if key == user_case:
-                user_case_value = value
-                break
+    for key, value in shuffle_cases.items():
+        if key == user_case:
+            user_case_value = value
+            break
+    else:
+        print("code error")
+    try:
+        if user_input_yes == True:
+            print(f"\nBank wishes make you one last offer\n You can accept: ${int(banks_offer)}\n\n Or Risk it all for a chance to win ${int     (banks_offer) * 2}")
+            double_chance = input("What Do You CHOOSE:  Yes Risk it all/No I'm Happy\n")
+            if double_chance.lower() == "y" or "yes":
+                print(" |   [1]   |   |   [2]   | \n You have a 50/50 Chance of doubling your money")
+                while True:
+                    try:
+                        case_choice = int(input("\nPlease Select your between case 1 and case 2"))
+                        if case_choice <= 2 and user_case >= 1:
+                            break
+                        else:
+                            print("Please choose a between case 1 and case 2")
+                            continue
+                    except ValueError:
+                        print("Please enter an integer")
+                        continue
+                money = [banks_offer, (banks_offer * 2)]
+                print(f"Congratulations you Won ${random.sample(money, k=1)}!!")
+                exit()
             else:
-                continue
-        print(f"\nBank wishes make you one last offer\n You can accept: ${int(user_case_value)}\n Or Risk it all for a chance to win ${int(user_case_value) * 2}")
-        double_chance = input("What Do You CHOOSE:  yes/no\n")   
+                print(f"Congratulations you won ${banks_offer}")
+    except:
+        return
+
+                
 
     
-
-def game_finish(cases_left, shuffle_cases, user_case):
+def game_finish():
     pass
