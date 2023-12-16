@@ -138,18 +138,30 @@ def game(cases, shuffle_cases, cases_left, user_case):
         print("\nMoney Left: ", *cases.values())
         print("Cases Left to open: ", *cases_left)
         print(f"\n${banks_offer}")
-        user_input = input("Do you accept the banks offer?  ")
-        interation += 1
-    last_case = cases_left
-    return last_case
-
-def double_or_nothing(user_case, shuffle_cases, last_case):
-    for key, value in shuffle_cases.items():
-        if key == user_case:
-            user_case_value = value
-            break
+        user_input = input("Do you accept the banks offer? yes/no\n")
+        if  user_input.upper() == ["Y" or "YES"]:
+            user_input_yes = True
+            interation += 6
         else:
-            continue
+            interation += 1
+    last_case = cases_left
+    return last_case, user_input_yes, banks_offer
+
+def double_or_nothing(user_case, shuffle_cases, last_case, user_input_yes, banks_offer):
+    try:
+        subprocess.run('clear')
+    except:
+        subprocess.run('cls')
+    if user_input_yes != True:
+        for key, value in shuffle_cases.items():
+            if key == user_case:
+                user_case_value = value
+                break
+            else:
+                continue
+        print(f"\nBank wishes make you one last offer\n You can accept: ${int(user_case_value)}\n Or Risk it all for a chance to win ${int(user_case_value) * 2}")
+        double_chance = input("What Do You CHOOSE:  yes/no\n")   
+
     
 
 def game_finish(cases_left, shuffle_cases, user_case):

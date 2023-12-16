@@ -44,8 +44,8 @@ cases = {
 game_menu()
 shuffled_cases = shuffler(cases)
 user_case, cases_in_play = select_case()
-last_case = game(cases, shuffled_cases, cases_in_play, user_case)
-double_or_nothing(user_case, shuffled_cases, last_case)# add usercase value
-game_finish(user_case, last_case)
+last_case, user_input_yes, bank_offer = game(cases, shuffled_cases, cases_in_play, user_case)
+double_or_nothing(user_case, shuffled_cases, last_case, user_input_yes)
+game_finish()
 print("exitedgame")
 exit()
