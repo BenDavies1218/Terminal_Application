@@ -48,7 +48,7 @@ def select_case():
     # user will input a number between and including 1-22
     while True:
         try:
-            user_case = int(input("Please Select your lucky case:  "))
+            user_case = int(input("\nPlease Select your lucky case:  "))
             if user_case <= 22 and user_case >= 1:
                 break
             else:
@@ -80,9 +80,7 @@ def game(cases, shuffle_cases, cases_left, user_case):
     # while loop check if count =< 0
         while count != 0:
             # Checks if theres more than one case
-            try:
-                cases_left[1]
-            except:
+            if cases_left[1] == True:
                 break
             # clears the screen
             try:
@@ -94,33 +92,41 @@ def game(cases, shuffle_cases, cases_left, user_case):
             print("Cases Left to open: ", *cases_left)
             print(f"\nYour Lucky Case Is:  {user_case}")
             try:
-                print(f"The last Case opened: {rm_case} contained: ${rm_value}")
+                print(f"The last Case opened: No. {rm_case} contained: ${rm_value}")
             except:
                 print("")
             # ask user to enter a case to be removed
-            tobe_removed = int(input("\nPlease select a Case to be removed:  "))
+            while True:
+                try:
+                    tobe_removed = int(input("\nPlease select a Case to be removed:  "))
+                    if tobe_removed in cases_left:
+                        break
+                    else:
+                        print("Please enter a number from the list of cases left")
+                except ValueError:
+                    print("Please enter a valid integer")
             # remove case from cases left
             for case in cases_left:
                 if case == tobe_removed:
                     rm_case = case
                     cases_left.remove(case)
                     break
-                else:
-                    continue
+            else:
+                continue
             # to print value of removed case to user
             for key, value in shuffle_cases.items():
                 if key == tobe_removed:
                     rm_value = value
                     break
-                else:
-                    continue
+            else:
+                continue
             # remove value from game
             for key, value in cases.items():
                 if value == rm_value:
                     cases.pop(key)
                     break
-                else:
-                    continue
+            else:
+                continue
             with open(file, "a") as f:
                 writer = csv.writer(f)
                 writer.writerow(["case_removed", rm_case])
@@ -139,9 +145,9 @@ def game(cases, shuffle_cases, cases_left, user_case):
         print("Cases Left to open: ", *cases_left)
         print(f"\n${banks_offer}")
         user_input = input("Do you accept the banks offer? yes/no\n")
-        if  user_input.upper() == ["Y" or "YES"]:
+        if user_input.lower() == "yes" or "y":
             user_input_yes = True
-            interation += 6
+            interation += 7
         else:
             interation += 1
     last_case = cases_left
