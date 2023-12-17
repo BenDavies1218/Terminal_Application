@@ -85,14 +85,6 @@ def game(cases, shuffle_cases, cases_left, user_case):
         count = 6 - int(interation)
     # while loop check if count =< 0
         while count != 0:
-            # Checks if theres more than one case and breaks loop
-            try:
-                if len(cases_left) == 1:
-                    interation += 6
-                    user_input_yes = "no"
-                    break
-            except:
-                continue
             # clears the screen
             try:
                 subprocess.run('clear')
@@ -155,22 +147,34 @@ def game(cases, shuffle_cases, cases_left, user_case):
         banks_offer = int(total_money_left / ((len(cases_left)) * 0.8))
         print("\nMoney Left: ", *cases.values())
         print("Cases Left to open: ", *cases_left)
-        print(f"\n${banks_offer}")
+        print(f"\nYour Lucky Case Is:  {user_case}")
+        try:
+            print(f"\nThe last Case opened: No. {rm_case} contained: ${rm_value}")
+        except:
+            print("")
+        print(f"\nThe Bank is willing to offer you ${banks_offer}")
         while True:
             try:
-                user_input = input("Do you accept the banks offer? yes/no\n").lower()
-                if user_input == "yes" or user_input == "y":
-                    user_input_yes = "yes"
-                    interation += 6
+                user_input = input("\nDo you accept this offer?:  ")
+                if all(letter.isalpha() or letter.isspace() for letter in user_input):
                     break
                 else:
-                    interation += 1
-                    break
-            except ValueError:
-                print("Please enter a valid string")
-                continue
-    last_cases = cases_left
-    return last_cases, user_input_yes, banks_offer
+                    print("\n Invalid input please try again")
+            except TypeError:
+                print("Error in user_input variable")
+        if user_input == "yes" or user_input == "y":
+            user_input_yes = "yes"
+            interation += 6
+        else:
+            user_input_yes = "no"
+            interation += 1
+        try:
+            if len(cases_left) == 1:
+                interation += 6
+                user_input_yes = "no"
+        except:
+            continue
+    return user_input_yes, banks_offer
 
 
 
@@ -187,8 +191,8 @@ def double_or_nothing(user_case, shuffle_cases, user_input_yes, banks_offer):
         print("code error")
     try:
         if user_input_yes == "yes":
-            print(f"\nBank wishes make you one last offer\n You can accept: ${int(banks_offer)}\n\nOr Risk it all for a chance to win ${int     (banks_offer) * 2}")
-            double_chance = input(" What Do You CHOOSE:  \n Yes : Risk it all\n No : I'm Happy\n Answer:  ").lower()
+            print(f"\n The bank wishes to make you one last offer\n You can accept: ${int(banks_offer)}\n\nOr Risk it all for a chance to win ${int     (banks_offer) * 2}")
+            double_chance = input(" What Do You CHOOSE:  \n\n Yes : Risk it all\n No : I'm Happy\n\n Answer:  ").lower()
             if double_chance == "y" or double_chance == "yes":
                 print("\n   [1]      [2]    \n\n You have a 50/50 Chance of doubling your money")
                 while True:
@@ -204,23 +208,26 @@ def double_or_nothing(user_case, shuffle_cases, user_input_yes, banks_offer):
                         continue
                 money = [banks_offer, (banks_offer * 2)]
                 print(f"Congratulations you Won ${random.sample(money, k=1)}!!")
-                play_again = input("Would you like to play again?  ")
+                play_again = input("Would you like to play again?  ").lower()
             else:
                 print(f"Congratulations you won ${banks_offer}")
-                play_again = input("Would you like to play again?  ")
+                play_again = input("Would you like to play again?  ").lower()
         else:
-            print(f"Congratulations you won ${user_case_value}")
-            play_again = input("Would you like to play again?  ")
+            print(f"Congratulations your case {user_case} contained ${user_case_value}")
+            play_again = input("Would you like to play again?  ").lower()
     except:
-        return play_again
+        print(f"Congratulations your case {user_case} contained ${user_case_value}")
+        play_again = input("Would you like to play again?  ").lower()
+    return play_again
 
                 
     
 def game_finish(play_again):
-    try:
-        if play_again == "yes" or play_again == "y":
-            return True
-    except:
-        exit = input("Thanks for playing, Press any key to exit...  ")
-        return False
+    if play_again == "yes" or play_again == "y":
+        exit = False
+    else:
+        input("Thanks for playing, Press any key to exit...  \n")
+        exit = True
+    return exit
+
 

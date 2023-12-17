@@ -16,7 +16,12 @@ except FileNotFoundError:
     gamelog.close()
 
 # Variables
-cases = {
+
+game_menu()
+
+while True:
+
+    cases = {
         1: 1,
         2: 5,
         3: 10,
@@ -41,18 +46,15 @@ cases = {
         22: 200000
     }
 
-game_menu()
-
-while True:
     shuffled_cases = shuffler(cases)
 
     user_case, cases_in_play = select_case()
 
-    last_cases, user_input_yes, banks_offer = game(cases, shuffled_cases, cases_in_play, user_case)
+    user_input_yes, banks_offer = game(cases, shuffled_cases, cases_in_play, user_case)
 
     play_again = double_or_nothing(user_case, shuffled_cases, user_input_yes, banks_offer)
 
-    if game_finish(play_again) == False:
+    if game_finish(play_again) == True:
         break
     else:
         continue
