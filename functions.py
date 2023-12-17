@@ -187,10 +187,10 @@ def double_or_nothing(user_case, shuffle_cases, user_input_yes, banks_offer):
         print("code error")
     try:
         if user_input_yes == "yes":
-            print(f"\nBank wishes make you one last offer\n You can accept: ${int(banks_offer)}\n\n Or Risk it all for a chance to win ${int     (banks_offer) * 2}")
-            double_chance = input("What Do You CHOOSE:  \nYes : Risk it all\nNo : I'm Happy\nAnswer:  ").lower()
+            print(f"\nBank wishes make you one last offer\n You can accept: ${int(banks_offer)}\n\nOr Risk it all for a chance to win ${int     (banks_offer) * 2}")
+            double_chance = input(" What Do You CHOOSE:  \n Yes : Risk it all\n No : I'm Happy\n Answer:  ").lower()
             if double_chance == "y" or double_chance == "yes":
-                print(" |   [1]   |   |   [2]   | \n You have a 50/50 Chance of doubling your money")
+                print("\n   [1]      [2]    \n\n You have a 50/50 Chance of doubling your money")
                 while True:
                     try:
                         case_choice = int(input("\nPlease Select your between case 1 and case 2   "))
@@ -208,15 +208,19 @@ def double_or_nothing(user_case, shuffle_cases, user_input_yes, banks_offer):
             else:
                 print(f"Congratulations you won ${banks_offer}")
                 play_again = input("Would you like to play again?  ")
+        else:
+            print(f"Congratulations you won ${user_case_value}")
+            play_again = input("Would you like to play again?  ")
     except:
-        return user_case_value, play_again
+        return play_again
 
                 
     
-def game_finish(user_case_value, user_case, shuffled_cases, last_cases):
+def game_finish(play_again):
     try:
-        subprocess.run('clear')
+        if play_again == "yes" or play_again == "y":
+            return True
     except:
-        subprocess.run('cls')
-    # print cases left and user case
-    # 
+        exit = input("Thanks for playing, Press any key to exit...  ")
+        return False
+

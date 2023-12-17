@@ -50,6 +50,10 @@ while True:
 
     last_cases, user_input_yes, banks_offer = game(cases, shuffled_cases, cases_in_play, user_case)
 
-    user_case_value = double_or_nothing(user_case, shuffled_cases, user_input_yes, banks_offer)
+    play_again = double_or_nothing(user_case, shuffled_cases, user_input_yes, banks_offer)
 
-    game_finish(user_case_value, user_case, shuffled_cases, last_cases)
+    if game_finish(play_again) == False:
+        break
+    else:
+        continue
+exit()
