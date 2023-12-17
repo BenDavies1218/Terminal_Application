@@ -2,6 +2,7 @@ import random
 import csv
 from colored import fg, attr, bg 
 import subprocess
+import math
 
 file = "gamelog.csv"
 
@@ -35,8 +36,6 @@ def shuffler(cases):
     with open(file, "a") as f:
         writer = csv.writer(f)
         writer.writerow(["cases shuffled = True\n"])
-    with open(file, "a") as f:
-        writer = csv.writer(f)
         for key, value in shuffle_cases.items():
             writer.writerow([key, value])        
     return shuffle_cases
@@ -64,18 +63,17 @@ def select_case():
             print("Please enter an integer")
             continue
     # remove selected case from cases_left
-    with open(file, "a") as f:
-        writer = csv.writer(f)
-        writer.writerow(["Users_case", user_case])
     for case in cases_left:
         if user_case == case:
             cases_left.remove(case)
             break
     with open(file, "a") as f:
         writer = csv.writer(f)
+        writer.writerow(["Users_case", user_case])
         writer.writerow(["case_removed", user_case])
-    return user_case, cases_left
     # return selected case back to main
+    return user_case, cases_left
+    
 
 
 
@@ -144,7 +142,10 @@ def game(cases, shuffle_cases, cases_left, user_case):
         for key, value in shuffle_cases.items():
             if key in cases_left:
                 total_money_left = value + total_money_left
-        banks_offer = int(total_money_left / ((len(cases_left)) * 0.8))
+        banks_offer = math.sqrt(total_money_left**2 / len(cases_left))
+        with open(file, "a") as f:
+                writer = csv.writer(f)
+                writer.writerow(["Bank Offer", (interation + 1), int(banks_offer)])
         print("\nMoney Left: ", *cases.values())
         print("Cases Left to open: ", *cases_left)
         print(f"\nYour Lucky Case Is:  {user_case}")
@@ -152,7 +153,7 @@ def game(cases, shuffle_cases, cases_left, user_case):
             print(f"\nThe last Case opened: No. {rm_case} contained: ${rm_value}")
         except:
             print("")
-        print(f"\nThe Bank is willing to offer you ${banks_offer}")
+        print(f"\nThe Bank is willing to offer you ${int(banks_offer)}")
         while True:
             try:
                 user_input = input("\nDo you accept this offer?:  ")
@@ -163,18 +164,24 @@ def game(cases, shuffle_cases, cases_left, user_case):
             except TypeError:
                 print("Error in user_input variable")
         if user_input == "yes" or user_input == "y":
+            with open(file, "a") as f:
+                writer = csv.writer(f)
+                writer.writerow(["Bank Offer Accepted"])
             user_input_yes = "yes"
-            interation += 6
+            interation = 6
         else:
+            with open(file, "a") as f:
+                writer = csv.writer(f)
+                writer.writerow(["Bank Offer Declined"])
             user_input_yes = "no"
             interation += 1
         try:
             if len(cases_left) == 1:
                 interation += 6
-                user_input_yes = "no"
+                user_input_yes = "yes"
         except:
             continue
-    return user_input_yes, banks_offer
+    return user_input_yes, banks_offer, total_money_left
 
 
 
@@ -187,13 +194,14 @@ def double_or_nothing(user_case, shuffle_cases, user_input_yes, banks_offer):
         if key == user_case:
             user_case_value = value
             break
-    else:
-        print("code error")
     try:
         if user_input_yes == "yes":
             print(f"\n The bank wishes to make you one last offer\n You can accept: ${int(banks_offer)}\n\nOr Risk it all for a chance to win ${int     (banks_offer) * 2}")
             double_chance = input(" What Do You CHOOSE:  \n\n Yes : Risk it all\n No : I'm Happy\n\n Answer:  ").lower()
             if double_chance == "y" or double_chance == "yes":
+                with open(file, "a") as f:
+                    writer = csv.writer(f)
+                    writer.writerow(["Double or nothing offer Accepted"])
                 print("\n   [1]      [2]    \n\n You have a 50/50 Chance of doubling your money")
                 while True:
                     try:
@@ -206,18 +214,35 @@ def double_or_nothing(user_case, shuffle_cases, user_input_yes, banks_offer):
                     except ValueError:
                         print("Please enter an integer")
                         continue
-                money = [banks_offer, (banks_offer * 2)]
-                print(f"Congratulations you Won ${random.sample(money, k=1)}!!")
+                money = [0, (banks_offer * 2)]
+                winnings = int(random.choice(money))
+                print(f"Congratulations you Won ${winnings}!!")
+                with open(file, "a") as f:
+                    writer = csv.writer(f)
+                    if winnings > banks_offer:
+                        writer.writerow(["Won Double YAY!"])
+                    else:
+                        writer.writerow(["Walking away with nothing"])
                 play_again = input("Would you like to play again?  ").lower()
             else:
                 print(f"Congratulations you won ${banks_offer}")
                 play_again = input("Would you like to play again?  ").lower()
+                with open(file, "a") as f:
+                    writer = csv.writer(f)
+                    writer.writerow(["Double or nothing Declined"])
+                    writer.writerow(["won", banks_offer])
         else:
             print(f"Congratulations your case {user_case} contained ${user_case_value}")
             play_again = input("Would you like to play again?  ").lower()
+            with open(file, "a") as f:
+                writer = csv.writer(f)
+                writer.writerow(["won", user_case_value])
     except:
         print(f"Congratulations your case {user_case} contained ${user_case_value}")
         play_again = input("Would you like to play again?  ").lower()
+        with open(file, "a") as f:
+            writer = csv.writer(f)
+            writer.writerow(["won", user_case_value])
     return play_again
 
                 
@@ -225,9 +250,15 @@ def double_or_nothing(user_case, shuffle_cases, user_input_yes, banks_offer):
 def game_finish(play_again):
     if play_again == "yes" or play_again == "y":
         exit = False
+        with open(file, "a") as f:
+            writer = csv.writer(f)
+            writer.writerow(["User playing again"])
     else:
-        input("Thanks for playing, Press any key to exit...  \n")
+        input("Thanks for playing, Press any key to exit...  ")
         exit = True
+        with open(file, "a") as f:
+            writer = csv.writer(f)
+            writer.writerow(["User exiting application"])
     return exit
 
 

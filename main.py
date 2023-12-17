@@ -1,8 +1,5 @@
-from colored import fg, attr, bg
 from functions import game_menu, shuffler, select_case, game, game_finish, double_or_nothing
 import csv
-import subprocess
-import time
 
 file = "gamelog.csv"
 
@@ -14,8 +11,6 @@ except FileNotFoundError:
     gamelog = open(file, "w")
     gamelog.write("Deal or No Deal\n")
     gamelog.close()
-
-# Variables
 
 game_menu()
 
@@ -50,7 +45,7 @@ while True:
 
     user_case, cases_in_play = select_case()
 
-    user_input_yes, banks_offer = game(cases, shuffled_cases, cases_in_play, user_case)
+    user_input_yes, banks_offer, total_money_left = game(cases, shuffled_cases, cases_in_play, user_case)
 
     play_again = double_or_nothing(user_case, shuffled_cases, user_input_yes, banks_offer)
 
