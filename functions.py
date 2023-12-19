@@ -3,8 +3,18 @@ import csv
 from colored import fg, attr, bg 
 import subprocess
 import math
+import sys
 
 file = "gamelog.csv"
+
+
+color_heading: str = f"{attr(1)}{fg(4)}"
+color_text: str = f"{attr(3)}{fg(15)}"
+color_your_case: str = f"{attr(3)}{fg(1)}"
+color_cases_left: str = f"{attr(3)}{fg(11)}"
+color_money_left: str = f"{attr(1)}{fg(10)}"
+color_input_error: str = f"{attr(4)}{fg(1)}"
+color_winnings: str = f"{attr(9)}{fg(220)}"
 
 def game_menu():
         # clears the screen
@@ -12,17 +22,17 @@ def game_menu():
         subprocess.run('clear')
     except:
         subprocess.run('cls')
-    print("Welcome to Deal or No Deal Will you take home the top prize?")
-    start_game = input("\npress any button to start... ")
+    print(f"{color_heading}Welcome to Deal or No Deal Will you take home the top prize?{attr('reset')}")
+    start_game = input(f"\n{color_heading}press any button to start... ")
     while True:
         try:
-            name = input("\nPlease enter your name:  ")
+            name = input(f"\n{color_text}Please enter your name:  {attr('reset')}")
             if all(letter.isalpha() or letter.isspace() for letter in name):
                 break
             else:
-                print("\n Invalid name please try again")
+                print(f"\n{color_input_error}Invalid name please try again{attr('reset')}")
         except TypeError:
-            print("Error in name variable")
+            print(f"{color_input_error}Error in name variable{attr('reset')}")
     with open(file, "a") as f:
         writer = csv.writer(f)
         writer.writerow(["Player", name])
@@ -53,14 +63,14 @@ def select_case():
     # user will input a number between and including 1-22
     while True:
         try:
-            user_case = int(input("\nPlease Select your lucky case:  "))
+            user_case = int(input(f"\n{color_text}Please Select your lucky case:  {attr('reset')}"))
             if user_case <= 22 and user_case >= 1:
                 break
             else:
-                print("Please choose a case between 1-22")
+                print(f"{color_input_error}Please choose a case between 1-22{attr('reset')}")
                 continue
         except ValueError:
-            print("Please enter an integer")
+            print(f"{color_input_error}Please enter an integer{attr('reset')}")
             continue
     # remove selected case from cases_left
     for case in cases_left:
@@ -89,11 +99,11 @@ def game(cases, shuffle_cases, cases_left, user_case):
             except:
                 subprocess.run('cls')
         # print cases_left to user
-            print("\nMoney Left: ", *cases.values())
-            print("Cases Left to open: ", *cases_left)
-            print(f"\nYour Lucky Case Is:  {user_case}")
+            print(f"\n{color_text}Money Left:{attr('reset')}", color_money_left, *cases.values(), attr('reset'))
+            print(f"\n{color_text}Cases Left to open: {attr('reset')}", color_cases_left, *cases_left , attr('reset'))
+            print(f"\n{color_text}Your Lucky Case Is:  {attr('reset')}", color_your_case, [user_case], attr('reset'))
             try:
-                print(f"The last Case opened: No. {rm_case} contained: ${rm_value}")
+                print(f"{color_text}The last Case opened: No. {rm_case} contained: ${rm_value}{attr('reset')}")
             except:
                 print("")
             print(f"Next bank offer in: {count} cases")
@@ -142,6 +152,7 @@ def game(cases, shuffle_cases, cases_left, user_case):
         for key, value in shuffle_cases.items():
             if key in cases_left:
                 total_money_left = value + total_money_left
+        # Calculates the Median Square Root
         banks_offer = math.sqrt(total_money_left**2 / len(cases_left))
         with open(file, "a") as f:
                 writer = csv.writer(f)
@@ -149,10 +160,12 @@ def game(cases, shuffle_cases, cases_left, user_case):
         print("\nMoney Left: ", *cases.values())
         print("Cases Left to open: ", *cases_left)
         print(f"\nYour Lucky Case Is:  {user_case}")
+        # Prints last case value to user
         try:
             print(f"\nThe last Case opened: No. {rm_case} contained: ${rm_value}")
         except:
             print("")
+        # prints bank offer
         print(f"\nThe Bank is willing to offer you ${int(banks_offer)}")
         while True:
             try:
