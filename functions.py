@@ -10,7 +10,7 @@ file = "gamelog.csv"
 
 color_heading: str = f"{attr(1)}{fg(4)}"
 color_text: str = f"{attr(3)}{fg(15)}"
-color_your_case: str = f"{attr(3)}{fg(1)}"
+color_your_case: str = f"{attr(3)}{fg(188)}"
 color_cases_left: str = f"{attr(3)}{fg(11)}"
 color_money_left: str = f"{attr(1)}{fg(10)}"
 color_input_error: str = f"{attr(4)}{fg(1)}"
@@ -23,7 +23,9 @@ def game_menu():
     except:
         subprocess.run('cls')
     print(f"{color_heading}Welcome to Deal or No Deal Will you take home the top prize?{attr('reset')}")
-    start_game = input(f"\n{color_heading}press any button to start... ")
+    start_game = input(f"\n{color_heading}Press H to view the game rules\n\nPress any other button to start the game... {attr('reset')}")
+    if start_game.lower() == "h":
+        start_game()
     while True:
         try:
             name = input(f"\n{color_text}Please enter your name:  {attr('reset')}")
@@ -37,6 +39,10 @@ def game_menu():
         writer = csv.writer(f)
         writer.writerow(["Player", name])
 
+
+def game_help():
+    print(f"{color_heading}Welcome to Deal or No Deal Rules{attr('reset')}")
+    
 
 
 def shuffler(cases):
@@ -59,7 +65,7 @@ def select_case():
         subprocess.run('clear')
     except:
         subprocess.run('cls')
-    print(cases_left)
+    print(color_cases_left, *cases_left, attr('reset'))
     # user will input a number between and including 1-22
     while True:
         try:
@@ -103,20 +109,20 @@ def game(cases, shuffle_cases, cases_left, user_case):
             print(f"\n{color_text}Cases Left to open: {attr('reset')}", color_cases_left, *cases_left , attr('reset'))
             print(f"\n{color_text}Your Lucky Case Is:  {attr('reset')}", color_your_case, [user_case], attr('reset'))
             try:
-                print(f"{color_text}The last Case opened: No. {rm_case} contained: ${rm_value}{attr('reset')}")
+                print(f"{color_text}The last Case opened: No. ", color_cases_left,rm_case, attr('reset'), f"{color_text}contained: {attr('reset')}", color_money_left,'$', rm_value, attr('reset'))
             except:
                 print("")
-            print(f"Next bank offer in: {count} cases")
+            print(f"{color_text}Next bank offer in: {count} cases{attr('reset')}")
             # ask user to enter a case to be removed
             while True:
                 try:
-                    tobe_removed = int(input("\nPlease select a Case to be removed:  "))
+                    tobe_removed = int(input(f"\n{color_text}Please select a Case to be removed:  "))
                     if tobe_removed in cases_left:
                         break
                     else:
-                        print("Please enter a number from the list of cases left")
+                        print(color_input_error, "Please enter a number from the list of cases left to open", attr('reset'))
                 except ValueError:
-                    print("Please enter a valid integer")
+                    print(color_input_error, "Please enter a valid integer", attr('reset'))
             # remove case from cases left
             for case in cases_left:
                 if case == tobe_removed:
@@ -157,25 +163,24 @@ def game(cases, shuffle_cases, cases_left, user_case):
         with open(file, "a") as f:
                 writer = csv.writer(f)
                 writer.writerow(["Bank Offer", (interation + 1), int(banks_offer)])
-        print("\nMoney Left: ", *cases.values())
-        print("Cases Left to open: ", *cases_left)
-        print(f"\nYour Lucky Case Is:  {user_case}")
-        # Prints last case value to user
+        print(f"\n{color_text}Money Left:{attr('reset')}", color_money_left, *cases.values(), attr('reset'))
+        print(f"\n{color_text}Cases Left to open: {attr('reset')}", color_cases_left, *cases_left , attr('reset'))
+        print(f"\n{color_text}Your Lucky Case Is:  {attr('reset')}", color_your_case, [user_case], attr('reset'))
         try:
-            print(f"\nThe last Case opened: No. {rm_case} contained: ${rm_value}")
+            print(f"{color_text}The last Case opened: No. ", color_cases_left,rm_case, attr('reset'), f"{color_text}contained: {attr('reset')}", color_money_left,'$', rm_value, attr('reset'))
         except:
             print("")
         # prints bank offer
-        print(f"\nThe Bank is willing to offer you ${int(banks_offer)}")
+        print(f"\n{color_text}The Bank is willing to offer you{attr('reset')}", color_money_left, '$',int(banks_offer), attr('reset'))
         while True:
             try:
-                user_input = input("\nDo you accept this offer?:  ")
+                user_input = input(f"{color_text}\nDo you accept this offer?: {attr('reset')}")
                 if all(letter.isalpha() or letter.isspace() for letter in user_input):
                     break
                 else:
-                    print("\n Invalid input please try again")
+                    print(color_input_error, "\nInvalid input please try again", attr('reset'))
             except TypeError:
-                print("Error in user_input variable")
+                print(color_input_error, "Error in user input variable", attr('reset'))
         if user_input == "yes" or user_input == "y":
             with open(file, "a") as f:
                 writer = csv.writer(f)
@@ -191,7 +196,7 @@ def game(cases, shuffle_cases, cases_left, user_case):
         try:
             if len(cases_left) == 1:
                 interation += 6
-                user_input_yes = "yes"
+                user_input_yes = "no"
         except:
             continue
     return user_input_yes, banks_offer, total_money_left
@@ -209,50 +214,50 @@ def double_or_nothing(user_case, shuffle_cases, user_input_yes, banks_offer):
             break
     try:
         if user_input_yes == "yes":
-            print(f"\n The bank wishes to make you one last offer\n You can accept: ${int(banks_offer)}\n\nOr Risk it all for a chance to win ${int     (banks_offer) * 2}")
-            double_chance = input(" What Do You CHOOSE:  \n\n Yes : Risk it all\n No : I'm Happy\n\n Answer:  ").lower()
+            print(f"\n{color_text} The bank wishes to make you one last offer\n You can accept: {attr('reset')}", color_money_left, '$',int(banks_offer),attr('reset'), "\n\nOr Risk it all for a chance to win ",color_money_left, '$',(int(banks_offer) * 2),attr('reset'))
+            double_chance = input(f"{color_text} What Do You CHOOSE:  \n\n Yes : Risk it all\n No : I'm Happy\n\n Answer:  {attr('reset')}").lower()
             if double_chance == "y" or double_chance == "yes":
                 with open(file, "a") as f:
                     writer = csv.writer(f)
                     writer.writerow(["Double or nothing offer Accepted"])
-                print("\n   [1]      [2]    \n\n You have a 50/50 Chance of doubling your money")
+                print(f"\n{color_cases_left}   [1]      [2]    {attr('reset')}\n\n {color_text}You have a 50/50 Chance of doubling your money{attr('reset')}")
                 while True:
                     try:
-                        case_choice = int(input("\nPlease Select your between case 1 and case 2   "))
+                        case_choice = int(input(f"\n{color_text}Please Select your between case 1 and case 2   {attr('reset')}"))
                         if case_choice <= 2 and user_case >= 1:
                             break
                         else:
-                            print("Please choose a between case 1 and case 2")
+                            print(f"{color_input_error}Please choose a between case 1 and case 2{attr('reset')}")
                             continue
                     except ValueError:
-                        print("Please enter an integer")
+                        print(f"{color_input_error}Please enter an integer{attr('reset')}")
                         continue
                 money = [0, (banks_offer * 2)]
                 winnings = int(random.choice(money))
-                print(f"Congratulations you Won ${winnings}!!")
+                print(f"{color_winnings}Congratulations you Won {attr('reset')}{color_money_left}${winnings}{attr('reset')}")
                 with open(file, "a") as f:
                     writer = csv.writer(f)
                     if winnings > banks_offer:
                         writer.writerow(["Won Double YAY!"])
                     else:
                         writer.writerow(["Walking away with nothing"])
-                play_again = input("Would you like to play again?  ").lower()
+                play_again = input(f"{color_text}Would you like to play again?  {attr('reset')}").lower()
             else:
-                print(f"Congratulations you won ${banks_offer}")
-                play_again = input("Would you like to play again?  ").lower()
+                print(f"{color_winnings}Congratulations you won {attr('reset')}{color_money_left}${banks_offer}{attr('reset')}")
+                play_again = input(f"{color_text}Would you like to play again?  {attr('reset')}").lower()
                 with open(file, "a") as f:
                     writer = csv.writer(f)
                     writer.writerow(["Double or nothing Declined"])
                     writer.writerow(["won", banks_offer])
         else:
-            print(f"Congratulations your case {user_case} contained ${user_case_value}")
-            play_again = input("Would you like to play again?  ").lower()
+            print(f"{color_text}Congratulations your case {attr('reset')}{color_your_case}{user_case} {attr('reset')}{color_text}contained{attr('reset')}{color_money_left} ${user_case_value}{attr('reset')}")
+            play_again = input(f"{color_text}Would you like to play again?  {attr('reset')}").lower()
             with open(file, "a") as f:
                 writer = csv.writer(f)
                 writer.writerow(["won", user_case_value])
     except:
-        print(f"Congratulations your case {user_case} contained ${user_case_value}")
-        play_again = input("Would you like to play again?  ").lower()
+        print(f"{color_text}Congratulations your case {attr('reset')}{color_your_case}{user_case} {attr('reset')}{color_text}contained{attr('reset')}{color_money_left} ${user_case_value}{attr('reset')}")
+        play_again = input(f"{color_text}Would you like to play again?  {attr('reset')}").lower()
         with open(file, "a") as f:
             writer = csv.writer(f)
             writer.writerow(["won", user_case_value])
