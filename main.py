@@ -1,4 +1,11 @@
-from functions import game_menu, shuffler, select_case, game, game_finish, double_or_nothing
+from functions import (
+    game_menu,
+    shuffler,
+    select_case,
+    game,
+    game_finish,
+    double_or_nothing,
+)
 import csv
 
 file = "gamelog.csv"
@@ -15,7 +22,6 @@ except FileNotFoundError:
 game_menu()
 
 while True:
-
     cases = {
         1: 1,
         2: 5,
@@ -38,19 +44,19 @@ while True:
         19: 50000,
         20: 100000,
         21: 150000,
-        22: 200000
+        22: 200000,
     }
 
     shuffled_cases = shuffler(cases)
 
     user_case, cases_in_play = select_case()
 
-    user_input_yes, banks_offer, total_money_left = game(cases, shuffled_cases, cases_in_play, user_case)
+    user_input_yes, banks_offer = game(cases, shuffled_cases, cases_in_play, user_case)
 
-    play_again = double_or_nothing(user_case, shuffled_cases, user_input_yes, banks_offer)
+    play_again = double_or_nothing(
+        user_case, shuffled_cases, user_input_yes, banks_offer
+    )
 
     if game_finish(play_again) == True:
         break
-    else:
-        continue
 exit()
