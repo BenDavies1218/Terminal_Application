@@ -3,19 +3,17 @@ import csv
 from colored import fg, attr, bg
 import subprocess
 import math
-import pytest
 
 
-class InputIsEmptyError(Exception):
+class EmptyInputError(Exception):
     pass
 
 
-class InvalidNameError(Exception):
+class InvalidStringError(Exception):
     pass
 
-
-file = "gamelog.csv"
-
+# usage for colored is as follows
+# {specify colour change}  (text or variable that we want to change color)  {attr('reset') to reset terminal color to default}
 
 color_heading: str = f"{attr(1)}{fg(4)}"
 color_text: str = f"{attr(3)}{fg(15)}"
@@ -24,6 +22,9 @@ color_cases_left: str = f"{attr(3)}{fg(11)}"
 color_money_left: str = f"{attr(1)}{fg(10)}"
 color_input_error: str = f"{attr(4)}{fg(1)}"
 color_winnings: str = f"{attr(3)}{fg(220)}"
+
+
+file = "gamelog.csv"
 
 
 def game_menu():
@@ -36,29 +37,29 @@ def game_menu():
         f"{color_heading}Welcome to Deal or No Deal Will you take home the top prize?{attr('reset')}"
     )
     start_game = input(
-        f"\n{color_heading}Press H to view the game rules\n\nPress any other button to start the game... {attr('reset')}"
+        f"\n{color_heading}Enter H to view the game rules\n\nPress Enter to start the game... {attr('reset')}"
     )
     if start_game.lower() == "h":
-        start_game()
+        game_help()
     while True:
         try:
             name = input(f"\n{color_text}Please enter your name:  {attr('reset')}")
             if len(name) > 0:
                 if all(letter.isalpha() or letter.isspace() for letter in name):
                     break
-                raise InvalidNameError("Invalid characters")
-            raise InputIsEmptyError("Empty String")
+                raise InvalidStringError("Invalid characters")
+            raise EmptyInputError("Empty String")
 
-        except InvalidNameError:
+        except InvalidStringError:
             print(
                 f"\n{color_input_error}Your name can only contain characters from a-z{attr('reset')}"
             )
-        except InputIsEmptyError:
+        except EmptyInputError:
             print(
                 f"\n{color_input_error}Your name must contain at least 1 character{attr('reset')}"
             )
         except Exception as e:
-            print(f"{color_input_error}{e}{attr('reset')}")
+            print(f"{color_input_error}Unexpected Error: {e}{attr('reset')}")
 
     with open(file, "a") as f:
         writer = csv.writer(f)
@@ -144,15 +145,14 @@ def select_case():
 
 def banker_offer(nums, nums_left):
     # Median square root calculator
-    # Banks offer = shuffle_cases[value] / cases_left
     total_money_left = 0
-    for key, value in nums.items():
-        if key in nums_left:
-            total_money_left = value + total_money_left
-    if len(nums_left) == 1:
-        offer = total_money_left / 2
+    if len(nums_left) <= 1:
+        total_money_left = sum(nums.values()) / 2
     else:
-        offer = (math.sqrt(total_money_left**2)) / len(nums_left)
+        for key, value in nums.items():
+            if key in nums_left:
+                total_money_left = value + total_money_left
+    offer = (math.sqrt(total_money_left**2)) / len(nums_left)
     return offer
 
 
@@ -250,7 +250,7 @@ def game(cases, shuffle_cases, cases_left, user_case):
         except:
             subprocess.run("cls")
         # Calculates the Median Square Root
-        banks_offer = banker_offer(shuffle_cases, cases_left)
+        banks_offer = banker_offer(cases, cases_left)
         with open(file, "a") as f:
             writer = csv.writer(f)
             writer.writerow(["Bank Offer", (interation + 1), int(banks_offer)])
@@ -307,7 +307,7 @@ def game(cases, shuffle_cases, cases_left, user_case):
                             break
                         else:
                             print("Enter yes or no")
-                    raise InvalidNameError("invalid string")
+                    raise InvalidStringError("invalid string")
                 else:
                     print(
                         color_input_error,
@@ -316,7 +316,7 @@ def game(cases, shuffle_cases, cases_left, user_case):
                     )
             except TypeError:
                 print(color_input_error, "Error in user input variable", attr("reset"))
-            except InvalidNameError:
+            except InvalidStringError:
                 print(
                     color_input_error,
                     "Invalid String Please only enter characters from A-Z",
@@ -334,6 +334,8 @@ def game(cases, shuffle_cases, cases_left, user_case):
                 writer.writerow(["Bank Offer Declined"])
             user_input_yes = "no"
             interation += 1
+        if len(cases_left) == 1:
+            interation += 6
     return user_input_yes, banks_offer
 
 
@@ -439,13 +441,13 @@ def double_or_nothing(user_case, shuffle_cases, user_input_yes, banks_offer):
 
 def game_finish(play_again):
     if play_again == "yes" or play_again == "y":
-        exit = False
+        exit = True
         with open(file, "a") as f:
             writer = csv.writer(f)
             writer.writerow(["User playing again"])
     else:
         input("Thanks for playing, Press any key to exit...  ")
-        exit = True
+        exit = False
         with open(file, "a") as f:
             writer = csv.writer(f)
             writer.writerow(["User exiting application"])

@@ -57,6 +57,6 @@ while True:
         user_case, shuffled_cases, user_input_yes, banks_offer
     )
 
-    if game_finish(play_again) == True:
+    if game_finish(play_again) == False:
         break
 exit()

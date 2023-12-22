@@ -1,4 +1,5 @@
 gamelog.csv
 .venv
-__pycache__
+.__pycache__
 .gitignore
+.pytest_cache
