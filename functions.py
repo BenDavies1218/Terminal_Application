@@ -1,6 +1,6 @@
 import random
 import csv
-from colored import fg, attr, bg
+from colored import fg, attr
 import subprocess
 import math
 
