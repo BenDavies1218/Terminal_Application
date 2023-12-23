@@ -6,6 +6,12 @@ from functions import (
     game_finish,
     double_or_nothing,
 )
+
+from test_functions import (
+    test_offer,
+    test_cases,
+)
+
 import csv
 
 file = "gamelog.csv"

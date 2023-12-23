@@ -12,6 +12,15 @@ class EmptyInputError(Exception):
 class InvalidStringError(Exception):
     pass
 
+
+class InvalidIntegerError(Exception):
+    pass
+
+
+class YesOrNoInputError(Exception):
+    pass
+
+
 # usage for colored is as follows
 # {specify colour change}  (text or variable that we want to change color)  {attr('reset') to reset terminal color to default}
 
@@ -113,6 +122,7 @@ def select_case():
         subprocess.run("clear")
     except:
         subprocess.run("cls")
+    
     print(color_cases_left, *cases_left, attr("reset"))
     # user will input a number between and including 1-22
     while True:
@@ -122,14 +132,17 @@ def select_case():
             )
             if user_case <= 22 and user_case >= 1:
                 break
-            else:
-                print(
-                    f"{color_input_error}Please choose a case between 1-22{attr('reset')}"
-                )
-                continue
+            raise InvalidIntegerError("Invalid integer")
+        
         except ValueError:
             print(f"{color_input_error}Please enter an integer{attr('reset')}")
-            continue
+
+        except InvalidIntegerError:
+            print(f"{color_input_error} enter a valid integer between 1-22{attr('reset')}")
+        
+        except Exception as e:
+            print(f"{color_input_error}Unexpected Error: {e}{attr('reset')}")
+
     # remove selected case from cases_left
     for case in cases_left:
         if user_case == case:
@@ -144,15 +157,12 @@ def select_case():
 
 
 def banker_offer(nums, nums_left):
-    # Median square root calculator
+    # Median square root calculator / Quadratic mean calculator
     total_money_left = 0
-    if len(nums_left) <= 1:
-        total_money_left = sum(nums.values()) / 2
-    else:
-        for key, value in nums.items():
-            if key in nums_left:
-                total_money_left = value + total_money_left
-    offer = (math.sqrt(total_money_left**2)) / len(nums_left)
+    for key, value in nums.items():
+        if key in nums_left:
+            total_money_left = total_money_left + math.pow(value, 2)
+    offer = (math.sqrt((total_money_left / (len(nums_left) + 1))))
     return offer
 
 
@@ -209,16 +219,19 @@ def game(cases, shuffle_cases, cases_left, user_case):
                     )
                     if tobe_removed in cases_left:
                         break
-                    else:
-                        print(
-                            color_input_error,
-                            "Please enter a number from the list of cases left to open",
-                            attr("reset"),
-                        )
+                    raise InvalidIntegerError("Invalid Integer")
                 except ValueError:
                     print(
                         color_input_error, "Please enter a valid integer", attr("reset")
                     )
+                except InvalidIntegerError:
+                    print(
+                    f"{color_input_error}Please choose a number from the cases left to open{attr('reset')}"
+                    )
+                except Exception as e:
+                    print(f"{color_input_error}Unexpected Error: {e}{attr('reset')}"
+                    )
+                    
             # remove case from cases left
             for case in cases_left:
                 if case == tobe_removed:
@@ -250,7 +263,7 @@ def game(cases, shuffle_cases, cases_left, user_case):
         except:
             subprocess.run("cls")
         # Calculates the Median Square Root
-        banks_offer = banker_offer(cases, cases_left)
+        banks_offer = banker_offer(shuffle_cases, cases_left)
         with open(file, "a") as f:
             writer = csv.writer(f)
             writer.writerow(["Bank Offer", (interation + 1), int(banks_offer)])
@@ -294,35 +307,8 @@ def game(cases, shuffle_cases, cases_left, user_case):
             int(banks_offer),
             attr("reset"),
         )
-        while True:
-            try:
-                user_input = input(
-                    f"{color_text}\nDo you accept this offer?: {attr('reset')}"
-                )
-                if len(user_input) > 0:
-                    if all(
-                        letter.isalpha() or letter.isspace() for letter in user_input
-                    ):
-                        if "y" or "yes" or "n" or "no" == user_input.lower():
-                            break
-                        else:
-                            print("Enter yes or no")
-                    raise InvalidStringError("invalid string")
-                else:
-                    print(
-                        color_input_error,
-                        "\nInvalid input please try again",
-                        attr("reset"),
-                    )
-            except TypeError:
-                print(color_input_error, "Error in user input variable", attr("reset"))
-            except InvalidStringError:
-                print(
-                    color_input_error,
-                    "Invalid String Please only enter characters from A-Z",
-                    attr("reset"),
-                )
-        if user_input == "yes" or user_input == "y":
+        user_input = yesorno()
+        if user_input.lower() in ("yes", "y"):
             with open(file, "a") as f:
                 writer = csv.writer(f)
                 writer.writerow(["Bank Offer Accepted"])
@@ -356,15 +342,13 @@ def double_or_nothing(user_case, shuffle_cases, user_input_yes, banks_offer):
                 "$",
                 int(banks_offer),
                 attr("reset"),
-                "\n\nOr Risk it all for a chance to win ",
+                "\n\nOr Risk it all for a 50/50 chance to win ",
                 color_money_left,
                 "$",
                 (int(banks_offer) * 2),
                 attr("reset"),
             )
-            double_chance = input(
-                f"{color_text} What Do You CHOOSE:  \n\n Yes : Risk it all\n No : I'm Happy\n\n Answer:  {attr('reset')}"
-            ).lower()
+            double_chance = yesorno()
             if double_chance == "y" or double_chance == "yes":
                 with open(file, "a") as f:
                     writer = csv.writer(f)
@@ -381,21 +365,25 @@ def double_or_nothing(user_case, shuffle_cases, user_input_yes, banks_offer):
                         )
                         if case_choice <= 2 and user_case >= 1:
                             break
-                        else:
-                            print(
-                                f"{color_input_error}Please choose a between case 1 and case 2{attr('reset')}"
-                            )
-                            continue
+                        raise InvalidIntegerError("Only 1 or 2")
                     except ValueError:
                         print(
                             f"{color_input_error}Please enter an integer{attr('reset')}"
                         )
-                        continue
+                    except InvalidIntegerError:
+                        print(
+                            f"{color_input_error}Please enter 1 or 2 {attr('reset')}"
+                        )
                 money = [0, (banks_offer * 2)]
                 winnings = int(random.choice(money))
-                print(
-                    f"{color_winnings}Congratulations you Won {attr('reset')}{color_money_left}${winnings}{attr('reset')}"
-                )
+                if winnings > 0:
+                    print(
+                        f"{color_winnings}Congratulations you Won {attr('reset')}{color_money_left}${winnings}{attr('reset')}"
+                    )
+                else:
+                    print(
+                        f"{color_winnings}Sorry your gamble didn't pay off you won  {attr('reset')}{color_money_left}${winnings}{attr('reset')}"
+                    )
                 with open(file, "a") as f:
                     writer = csv.writer(f)
                     if winnings > banks_offer:
@@ -437,6 +425,41 @@ def double_or_nothing(user_case, shuffle_cases, user_input_yes, banks_offer):
             writer = csv.writer(f)
             writer.writerow(["won", user_case_value])
     return play_again
+
+
+def yesorno():
+    while True:
+        try:
+            user_input = input(
+                f"{color_text}\nDo you accept this offer?: {attr('reset')}"
+            )
+            if len(user_input) > 0:
+                if all(
+                    letter.isalpha() or letter.isspace() for letter in user_input):
+                    if user_input.lower() in ("y", "yes", "n", "no"):
+                        break
+                    raise YesOrNoInputError("Invalid answer")
+                raise InvalidStringError("invalid string")
+            raise EmptyInputError("empty string")
+        except EmptyInputError:
+            print(
+                color_input_error,
+                "Please enter yes or no",
+                attr("reset"),
+            )
+        except InvalidStringError:
+            print(
+                color_input_error,
+                "Invalid input Please answer Yes or No",
+                attr("reset"),
+            )
+        except YesOrNoInputError:
+            print(
+                    color_input_error,
+                    "Please Answer Yes or No", 
+                    attr("reset"),
+                )
+    return user_input
 
 
 def game_finish(play_again):

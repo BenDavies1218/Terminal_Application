@@ -1,27 +1,25 @@
 #!/bin/bash
-echo Checking if you have python
-sleep 1
-command -v python3 >/dev/null 2>&1 && echo Python 3 is installed
-
+echo Checking if you have the minimum required version of Python
 sleep 2
-echo Activating virtual Enviroment 
-python3 -m venv .venv
-source .venv/bin/activate
-echo $venv
 
-sleep 2
-echo Installing External Packages
-pip3 install colored
-pip3 install pytest
+function python_version () {
+    if command -v python3 >/dev/null 2>&1 ; then
+        echo Python 3 is installed this will suffice
+    else
+        echo Application requires at least python 3
+        read -p "Would you like to install it?" install
+        if install == 'yes' ; then
+            sudo apt-get install python3
+        else
+            echo Cant run Application
+            exit
+        fi
+    fi
+}
+python_version
 
-sleep 2
-echo Compiling main.py to check for Syntax Errors
-python3 -m py_compile main.py
+echo Installing Dependancies
+source Dependancies.sh && sleep 2
 
-sleep 5
-echo Running Game
-
-sleep 2
+echo Running Game && sleep 4
 python3 main.py
-
-sleep 15
