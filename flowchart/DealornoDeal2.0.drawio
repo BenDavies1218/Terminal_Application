@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2023-12-24T02:04:44.916Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" etag="WyhK5IOcIAbdEtLZ-fja" version="22.1.11" type="github">
+<mxfile host="app.diagrams.net" modified="2023-12-24T04:13:30.373Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" etag="DxRiBRwv2ZMBozqA2rDv" version="22.1.11" type="github">
   <diagram name="Page-1" id="VLC8R4KVJ3cNXHcV-09f">
-    <mxGraphModel dx="2524" dy="780" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2140" dy="565" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -155,14 +155,22 @@
         </mxCell>
         <mxCell id="-eVUB_hD1s0Y--Jl8ucJ-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-eVUB_hD1s0Y--Jl8ucJ-8" target="-eVUB_hD1s0Y--Jl8ucJ-10">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="596.5" y="2000" as="targetPoint" />
+            <mxPoint x="596.5" y="2134" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-eVUB_hD1s0Y--Jl8ucJ-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-eVUB_hD1s0Y--Jl8ucJ-8" target="-eVUB_hD1s0Y--Jl8ucJ-12">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="310" y="1987" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="-eVUB_hD1s0Y--Jl8ucJ-8" value="Call Double or nothing function" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="489.75" y="1816" width="213.5" height="74" as="geometry" />
+          <mxGeometry x="489.75" y="1950" width="213.5" height="74" as="geometry" />
         </mxCell>
-        <mxCell id="-eVUB_hD1s0Y--Jl8ucJ-10" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="536.5" y="1970" width="120" height="60" as="geometry" />
+        <mxCell id="-eVUB_hD1s0Y--Jl8ucJ-10" value="Checks if user want to play again" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="488.25" y="2104" width="216.5" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="-eVUB_hD1s0Y--Jl8ucJ-12" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="151" y="1940.5" width="220" height="93" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
