@@ -1,11 +1,15 @@
 import math
 
-from functions import banker_offer
+from functions import banker_offer, game_finish
+
+# Checks the function calculates the right offer
+def test_offer(): #              values left          cases left       Expected offer
+    assert int(banker_offer({1: 100, 2: 100, 3: 100}, [1, 2], 3)) == 100
+    assert int(banker_offer({1: 1, 2: 200, 3: 500}, [1, 2], 3)) == 310
+    assert int(banker_offer({1: 150, 2: 1500, 3: 1100}, [1, 2], 3)) == 1077
 
 
-def test_offer():
-    assert banker_offer({1: 5, 2: 100, 3: 2000, 4: 8000}, 4) == 4123
-
-
-def test_cases():
-    pass
+# Checks game finish function works
+def test_remove_case():
+    assert game_finish("yes") == True
+    assert game_finish("no") == False

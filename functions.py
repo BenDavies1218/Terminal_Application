@@ -46,7 +46,7 @@ def game_menu():
         f"{color_heading}Welcome to Deal or No Deal Will you take home the top prize?{attr('reset')}"
     )
     start_game = input(
-        f"\n{color_heading}Enter H to view the game rules\n\nPress Enter to start the game... {attr('reset')}"
+        f"\n{color_heading}Enter H to view how to play\n\nPress Enter to start the game... {attr('reset')}"
     )
     if start_game.lower() == "h":
         game_help()
@@ -76,8 +76,14 @@ def game_menu():
 
 
 def game_help():
-    print(f"{color_heading}Welcome to Deal or No Deal Rules{attr('reset')}")
-    print()
+    print(f"{color_heading}\nWelcome to Deal or No Deal how to play{attr('reset')}")
+    print(
+        "deal or no deal has 22 cases to begin with various values ranging from $1 to $200000",
+        "you will choose one case that you think has high value",
+        "you will slowly open the cases until the bank makes you an offer",
+        "the objective is to open all the low value cases so the bank will offer you more money",
+        "if you accept a bank offer, the bank will also offer you a 50/50 chance to double your money",
+        )
 
 
 def shuffler(cases):
@@ -156,11 +162,11 @@ def select_case():
     return user_case, cases_left
 
 
-def banker_offer(nums, nums_left):
+def banker_offer(nums, nums_left, user_num):
     # Median square root calculator / Quadratic mean calculator
     total_money_left = 0
     for key, value in nums.items():
-        if key in nums_left:
+        if key in nums_left or key == user_num:
             total_money_left = total_money_left + math.pow(value, 2)
     offer = (math.sqrt((total_money_left / (len(nums_left) + 1))))
     return offer
@@ -222,14 +228,15 @@ def game(cases, shuffle_cases, cases_left, user_case):
                     raise InvalidIntegerError("Invalid Integer")
                 except ValueError:
                     print(
-                        color_input_error, "Please enter a valid integer", attr("reset")
+                        f"{color_input_error}Please enter a valid integer{attr('reset')}"
                     )
                 except InvalidIntegerError:
                     print(
-                    f"{color_input_error}Please choose a number from the cases left to open{attr('reset')}"
+                        f"{color_input_error}Please choose a number from the cases left to open{attr('reset')}"
                     )
                 except Exception as e:
-                    print(f"{color_input_error}Unexpected Error: {e}{attr('reset')}"
+                    print(
+                        f"{color_input_error}Unexpected Error: {e}{attr('reset')}"
                     )
                     
             # remove case from cases left
@@ -263,7 +270,7 @@ def game(cases, shuffle_cases, cases_left, user_case):
         except:
             subprocess.run("cls")
         # Calculates the Median Square Root
-        banks_offer = banker_offer(shuffle_cases, cases_left)
+        banks_offer = banker_offer(shuffle_cases, cases_left, user_case)
         with open(file, "a") as f:
             writer = csv.writer(f)
             writer.writerow(["Bank Offer", (interation + 1), int(banks_offer)])
@@ -406,7 +413,7 @@ def double_or_nothing(user_case, shuffle_cases, user_input_yes, banks_offer):
                     writer.writerow(["won", banks_offer])
         else:
             print(
-                f"{color_text}Congratulations your case {attr('reset')}{color_your_case}{user_case} {attr('reset')}{color_text}contained{attr('reset')}{color_money_left} ${user_case_value}{attr('reset')}"
+                f"{color_winnings}Congratulations your case {attr('reset')}{color_cases_left}{user_case} {attr('reset')}{color_text}contained{attr('reset')}{color_money_left} ${user_case_value}{attr('reset')}"
             )
             play_again = input(
                 f"{color_text}Would you like to play again?  {attr('reset')}"
@@ -416,7 +423,7 @@ def double_or_nothing(user_case, shuffle_cases, user_input_yes, banks_offer):
                 writer.writerow(["won", user_case_value])
     except:
         print(
-            f"{color_text}Congratulations your case {attr('reset')}{color_your_case}{user_case} {attr('reset')}{color_text}contained{attr('reset')}{color_money_left} ${user_case_value}{attr('reset')}"
+            f"{color_winnings}Congratulations your case {attr('reset')}{color_cases_left}{user_case} {attr('reset')}{color_text}contained{attr('reset')}{color_money_left} ${user_case_value}{attr('reset')}"
         )
         play_again = input(
             f"{color_text}Would you like to play again?  {attr('reset')}"
@@ -469,7 +476,6 @@ def game_finish(play_again):
             writer = csv.writer(f)
             writer.writerow(["User playing again"])
     else:
-        input("Thanks for playing, Press any key to exit...  ")
         exit = False
         with open(file, "a") as f:
             writer = csv.writer(f)
