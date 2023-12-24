@@ -1,6 +1,5 @@
 #!/bin/bash/python3
 
-
 # Activate Virtual Enviroment
 echo Activating virtual Enviroment 
 python3 -m venv .venv
